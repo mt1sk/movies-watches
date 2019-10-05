@@ -13,6 +13,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+use Illuminate\Support\Facades\Route;
+
+/*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});*/
+
+Route::group(['namespace'=>'Api'], function () {
+    Route::group(['namespace'=>'Auth'], function () {
+        Route::post('/register', ['uses' => 'RegisterController@register', 'as' => 'api_register']);
+        Route::post('/login', ['uses' => 'LoginController@login', 'as' => 'api_login']);
+    });
 });

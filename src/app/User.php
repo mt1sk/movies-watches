@@ -42,4 +42,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Movie::class);
     }
+
+    public function ownsMovie(Movie $movie)
+    {
+        return $this->id === $movie->user_id;
+    }
 }

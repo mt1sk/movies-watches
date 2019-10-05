@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Movie;
+use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
@@ -26,6 +28,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('api-movie-show', function (User $user, Movie $movie) {
+            return $user->ownsMovie($movie);
+        });
+        Gate::define('api-movie-update', function (User $user, Movie $movie) {
+            return $user->ownsMovie($movie);
+        });
+        Gate::define('api-movie-delete', function (User $user, Movie $movie) {
+            return $user->ownsMovie($movie);
+        });
     }
 }

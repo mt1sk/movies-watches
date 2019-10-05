@@ -43,10 +43,10 @@ services:
         working_dir: ${APP_PATH_CONTAINER}
         command: composer install
 
-networks:
-  default:
-    external:
-      name: docker_network
+#networks:
+#  default:
+#    external:
+#      name: docker_network
 
 #networks:
 #    docker_network:

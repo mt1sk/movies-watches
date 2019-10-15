@@ -7,6 +7,7 @@ use App\Http\Requests\Api\IndexMovieRequest;
 use App\Http\Requests\Api\StoreMovieRequest;
 use App\Http\Requests\Api\UpdateMovieRequest;
 use App\Movie;
+use App\Movies\MovieSearch;
 use App\Watch;
 use Illuminate\Http\Request;
 use App\Http\Resources\Api\Movie as MovieResource;
@@ -17,13 +18,21 @@ class MovieController extends Controller
      * Display a listing of the resource.
      *
      * @param  \App\Http\Requests\Api\IndexMovieRequest  $request
+     * @param \App\Movies\MovieSearch $movieSearch
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(IndexMovieRequest $request)
+    public function index(IndexMovieRequest $request, MovieSearch $movieSearch)
     {
         $user = $request->user();
-        $limit = $request->get('limit', $user->getPerPage());
-        $movies = $user->movies()->orderBy('created_at', 'desc')->paginate($limit);
+        $limit = $request->get('limit', (new Movie())->getPerPage());
+        $query = $request->get('q');
+
+        if (!empty($query)) {
+            $movies = $movieSearch->search($query);
+        } else {
+            $movies = $user->movies()->orderBy('created_at', 'desc')->paginate($limit);
+        }
+
         return MovieResource::collection($movies);
     }
 

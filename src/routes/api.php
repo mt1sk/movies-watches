@@ -25,6 +25,8 @@ Route::group(['namespace'=>'Api'], function () {
         Route::post('/login', ['uses' => 'LoginController@login', 'as' => 'api_login']);
     });
 
+    Route::get('/init_globals', ['uses' => 'InitGlobalsController@init', 'as' => 'init_globals']);
+
     Route::middleware(['auth:api'])->group(function () {
         Route::prefix('/movies')->group(function () {
             Route::get('/', 'MovieController@index')->name('api_movie_index');

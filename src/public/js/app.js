@@ -49362,6 +49362,8 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
+/*Vue.component('nav-component', require('./components/NavComponent.vue').default);*/
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -49369,7 +49371,17 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
  */
 
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+  data: {
+    globals: []
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/api/v1/init_globals').then(function (response) {
+      _this.globals = response.data.data;
+    });
+  }
 });
 
 /***/ }),
@@ -49403,6 +49415,7 @@ try {
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.accessToken;
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

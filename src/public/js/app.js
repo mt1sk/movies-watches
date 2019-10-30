@@ -1911,7 +1911,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
       axios.post('/api/v1/login', this.loginForm).then(function (response) {
         localStorage.accessToken = response.data.data.token.access_token;
-        location.reload();
+        window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.accessToken;
+        EventVue.$emit('resetGlobal');
       })["catch"](function (error) {
         if (_typeof(error.response.data.data) === 'object') {
           if (error.response.data.data.errors) {
@@ -37586,14 +37587,10 @@ var staticRenderFns = [
       _c("div", { staticClass: "row justify-content-center" }, [
         _c("div", { staticClass: "col-md-8" }, [
           _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v("Example Component")
-            ]),
+            _c("div", { staticClass: "card-header" }, [_vm._v("Notification")]),
             _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [
-              _vm._v(
-                "\n                    I'm an example component.\n                "
-              )
+              _vm._v("\n                    Sign in first...\n                ")
             ])
           ])
         ])
@@ -49879,6 +49876,7 @@ module.exports = function(module) {
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+window.EventVue = new Vue();
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -49902,14 +49900,37 @@ var app = new Vue({
   el: '#app',
   data: {
     global: false,
-    activeComponent: 'list'
+    selectedComponent: 'list'
   },
   mounted: function mounted() {
     var _this = this;
 
-    axios.get('/api/v1/init_globals').then(function (response) {
-      _this.global = response.data.data;
+    EventVue.$on('resetGlobal', function () {
+      _this.getGlobal();
+
+      _this.selectedComponent = 'list';
     });
+    this.getGlobal();
+  },
+  methods: {
+    getGlobal: function getGlobal() {
+      var _this2 = this;
+
+      axios.get('/api/v1/init_globals').then(function (response) {
+        _this2.global = response.data.data;
+      });
+    }
+    /*isComponentActive(name) {
+        let _name = 'list';
+        if (!this.isAuthenticated) {
+         }
+    },*/
+
+  },
+  computed: {
+    isAuthenticated: function isAuthenticated() {
+      return this.global.user !== undefined && this.global.user !== null;
+    }
   }
 });
 

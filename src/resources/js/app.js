@@ -8,6 +8,8 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+window.EventVue = new Vue();
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -35,11 +37,33 @@ const app = new Vue({
     el: '#app',
     data: {
         global: false,
-        activeComponent: 'list',
+        selectedComponent: 'list',
     },
     mounted() {
-        axios.get('/api/v1/init_globals').then((response)=>{
-            this.global = response.data.data;
+        EventVue.$on('resetGlobal', () => {
+            this.getGlobal();
+            this.selectedComponent = 'list';
         });
+        this.getGlobal();
+    },
+
+    methods: {
+        getGlobal() {
+            axios.get('/api/v1/init_globals').then((response)=>{
+                this.global = response.data.data;
+            });
+        },
+        /*isComponentActive(name) {
+            let _name = 'list';
+            if (!this.isAuthenticated) {
+
+            }
+        },*/
+    },
+
+    computed: {
+        isAuthenticated() {
+            return this.global.user !== undefined && this.global.user !== null;
+        },
     }
 });

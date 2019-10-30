@@ -68,7 +68,8 @@
                 axios.post('/api/v1/login', this.loginForm)
                     .then(response => {
                         localStorage.accessToken = response.data.data.token.access_token;
-                        location.reload();
+                        window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.accessToken;
+                        EventVue.$emit('resetGlobal');
                     })
                     .catch(error => {
                         if (typeof error.response.data.data === 'object') {

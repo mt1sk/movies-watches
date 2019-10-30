@@ -39,15 +39,15 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
-                        <li class="nav-item" v-if="!global.user">
-                            <a class="nav-link" href="#" @click="activeComponent = 'auth'">Auth</a>
+                        <li class="nav-item" v-if="!isAuthenticated">
+                            <a class="nav-link" href="#" @click="selectedComponent = 'auth'">Auth</a>
                         </li>
 
-                        <li class="nav-item" v-if="global.user">
-                            <a class="nav-link" href="#" @click="activeComponent = 'list'">List</a>
+                        <li class="nav-item" v-if="isAuthenticated">
+                            <a class="nav-link" href="#" @click="selectedComponent = 'list'">List</a>
                         </li>
-                        <li class="nav-item" v-if="global.user">
-                            <a class="nav-link" href="#" @click="activeComponent = 'user_info'">User info</a>
+                        <li class="nav-item" v-if="isAuthenticated">
+                            <a class="nav-link" href="#" @click="selectedComponent = 'user_info'">User info</a>
                         </li>
                     </ul>
                 </div>
@@ -55,9 +55,10 @@
         </nav>
 
         <main class="py-4">
-            <example-component> </example-component>
-            <movies-list v-if="global.user && activeComponent==='list'"> </movies-list>
-            <authentication v-if="!global.user && activeComponent==='auth'"> </authentication>
+            <example-component v-if="!isAuthenticated && activeComponent!=='auth'"> </example-component>
+            <authentication v-if="!isAuthenticated && activeComponent==='auth'"> </authentication>
+
+            <movies-list v-if="isAuthenticated && activeComponent==='list'"> </movies-list>
         </main>
     </div>
 </body>

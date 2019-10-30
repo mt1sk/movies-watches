@@ -12,6 +12,7 @@ class InitGlobalsController extends Controller
         $data = [];
         $data['user'] = Auth::guard('api')->user();
         $data['app_name'] = config('app.name', 'Laravel');
+        $data['root_url'] = url('/');
         return response()->json(['data' => $data]);
     }
 }

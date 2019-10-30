@@ -57,6 +57,7 @@
         <main class="py-4">
             <example-component> </example-component>
             <movies-list v-if="global.user && activeComponent==='list'"> </movies-list>
+            <authentication v-if="!global.user && activeComponent==='auth'"> </authentication>
         </main>
     </div>
 </body>

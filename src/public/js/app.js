@@ -1888,6 +1888,33 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1902,6 +1929,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         email: '',
         password: '',
         errors: []
+      },
+      registerForm: {
+        email: '',
+        name: '',
+        password: '',
+        password_confirmation: '',
+        errors: []
       }
     };
   },
@@ -1910,20 +1944,35 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       var _this = this;
 
       axios.post('/api/v1/login', this.loginForm).then(function (response) {
-        localStorage.accessToken = response.data.data.token.access_token;
-        window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.accessToken;
-        EventVue.$emit('resetGlobal');
+        _this.onAuthSuccess(response);
       })["catch"](function (error) {
-        if (_typeof(error.response.data.data) === 'object') {
-          if (error.response.data.data.errors) {
-            _this.loginForm.errors = _.flatten(_.toArray(error.response.data.data.errors));
-          } else {
-            _this.loginForm.errors = [error.response.data.data.message];
-          }
-        } else {
-          _this.loginForm.errors = ['Something went wrong. Please try again.'];
-        }
+        _this.onAuthFailure(error, _this.loginForm);
       });
+    },
+    register: function register() {
+      var _this2 = this;
+
+      axios.post('/api/v1/register', this.registerForm).then(function (response) {
+        _this2.onAuthSuccess(response);
+      })["catch"](function (error) {
+        return _this2.onAuthFailure(error, _this2.registerForm);
+      });
+    },
+    onAuthSuccess: function onAuthSuccess(response) {
+      localStorage.accessToken = response.data.data.token.access_token;
+      window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.accessToken;
+      EventVue.$emit('resetGlobal');
+    },
+    onAuthFailure: function onAuthFailure(error, form) {
+      if (_typeof(error.response.data.data) === 'object') {
+        if (error.response.data.data.errors) {
+          form.errors = _.flatten(_.toArray(error.response.data.data.errors));
+        } else {
+          form.errors = [error.response.data.data.message];
+        }
+      } else {
+        form.errors = ['Something went wrong. Please try again.'];
+      }
     }
   }
 });
@@ -37534,13 +37583,185 @@ var render = function() {
                         attrs: { type: "submit" },
                         on: { click: _vm.login }
                       },
-                      [_vm._v("Submit")]
+                      [_vm._v("Log in")]
                     )
                   ]),
                   _vm._v(" "),
                   _c("tab", { attrs: { name: "Registration" } }, [
-                    _vm._v(
-                      "\n                            Registration form...\n                        "
+                    _vm.registerForm.errors.length > 0
+                      ? _c("div", { staticClass: "alert alert-danger" }, [
+                          _c(
+                            "ul",
+                            _vm._l(_vm.registerForm.errors, function(error) {
+                              return _c("li", [
+                                _vm._v(
+                                  "\n                                        " +
+                                    _vm._s(error) +
+                                    "\n                                    "
+                                )
+                              ])
+                            }),
+                            0
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "registerEmail" } }, [
+                        _vm._v("Email address")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.registerForm.email,
+                            expression: "registerForm.email"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "email",
+                          id: "registerEmail",
+                          placeholder: "Enter email"
+                        },
+                        domProps: { value: _vm.registerForm.email },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.registerForm,
+                              "email",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "registerName" } }, [
+                        _vm._v("Name")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.registerForm.name,
+                            expression: "registerForm.name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "text",
+                          id: "registerName",
+                          placeholder: "Enter name"
+                        },
+                        domProps: { value: _vm.registerForm.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.registerForm,
+                              "name",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "registerPassword" } }, [
+                        _vm._v("Password")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.registerForm.password,
+                            expression: "registerForm.password"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "password",
+                          id: "registerPassword",
+                          placeholder: "Password"
+                        },
+                        domProps: { value: _vm.registerForm.password },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.registerForm,
+                              "password",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c(
+                        "label",
+                        { attrs: { for: "registerPasswordConfirmation" } },
+                        [_vm._v("Password confirmation")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.registerForm.password_confirmation,
+                            expression: "registerForm.password_confirmation"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "password",
+                          id: "registerPasswordConfirmation",
+                          placeholder: "Confirm your password"
+                        },
+                        domProps: {
+                          value: _vm.registerForm.password_confirmation
+                        },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.registerForm,
+                              "password_confirmation",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit" },
+                        on: { click: _vm.register }
+                      },
+                      [_vm._v("Sign up")]
                     )
                   ])
                 ],

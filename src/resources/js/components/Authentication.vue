@@ -30,11 +30,38 @@
                                     <input type="checkbox" class="form-check-input" id="exampleCheck1">
                                     <label class="form-check-label" for="exampleCheck1">Check me out</label>
                                 </div>-->
-                                <button type="submit" class="btn btn-primary" @click="login">Submit</button>
+                                <button type="submit" class="btn btn-primary" @click="login">Log in</button>
                             </tab>
 
                             <tab name="Registration">
-                                Registration form...
+                                <div class="alert alert-danger" v-if="registerForm.errors.length > 0">
+                                    <!--<p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>-->
+                                    <ul>
+                                        <li v-for="error in registerForm.errors">
+                                            {{ error }}
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="registerEmail">Email address</label>
+                                    <input v-model="registerForm.email" type="email" class="form-control" id="registerEmail" placeholder="Enter email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="registerName">Name</label>
+                                    <input v-model="registerForm.name" type="text" class="form-control" id="registerName" placeholder="Enter name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="registerPassword">Password</label>
+                                    <input v-model="registerForm.password" type="password" class="form-control" id="registerPassword" placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="registerPasswordConfirmation">Password confirmation</label>
+                                    <input v-model="registerForm.password_confirmation" type="password" class="form-control" id="registerPasswordConfirmation" placeholder="Confirm your password">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" @click="register">Sign up</button>
                             </tab>
                         </tabs>
                     </div>
@@ -59,7 +86,15 @@
                     email: '',
                     password: '',
                     errors: [],
-                }
+                },
+
+                registerForm: {
+                    email: '',
+                    name: '',
+                    password: '',
+                    password_confirmation: '',
+                    errors: [],
+                },
             }
         },
 
@@ -67,21 +102,36 @@
             login() {
                 axios.post('/api/v1/login', this.loginForm)
                     .then(response => {
-                        localStorage.accessToken = response.data.data.token.access_token;
-                        window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.accessToken;
-                        EventVue.$emit('resetGlobal');
+                        this.onAuthSuccess(response);
                     })
                     .catch(error => {
-                        if (typeof error.response.data.data === 'object') {
-                            if (error.response.data.data.errors) {
-                                this.loginForm.errors = _.flatten(_.toArray(error.response.data.data.errors));
-                            } else {
-                                this.loginForm.errors = [error.response.data.data.message];
-                            }
-                        } else {
-                            this.loginForm.errors = ['Something went wrong. Please try again.'];
-                        }
+                        this.onAuthFailure(error, this.loginForm);
                     });
+            },
+
+            register() {
+                axios.post('/api/v1/register', this.registerForm)
+                    .then(response => {
+                        this.onAuthSuccess(response);
+                    })
+                    .catch(error => this.onAuthFailure(error, this.registerForm));
+            },
+
+            onAuthSuccess(response) {
+                localStorage.accessToken = response.data.data.token.access_token;
+                window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.accessToken;
+                EventVue.$emit('resetGlobal');
+            },
+            onAuthFailure(error, form) {
+                if (typeof error.response.data.data === 'object') {
+                    if (error.response.data.data.errors) {
+                        form.errors = _.flatten(_.toArray(error.response.data.data.errors));
+                    } else {
+                        form.errors = [error.response.data.data.message];
+                    }
+                } else {
+                    form.errors = ['Something went wrong. Please try again.'];
+                }
             },
         },
     }

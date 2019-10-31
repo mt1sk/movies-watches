@@ -49900,15 +49900,13 @@ var app = new Vue({
   el: '#app',
   data: {
     global: false,
-    selectedComponent: 'list'
+    selectedComponent: 'example'
   },
   mounted: function mounted() {
     var _this = this;
 
     EventVue.$on('resetGlobal', function () {
       _this.getGlobal();
-
-      _this.selectedComponent = 'list';
     });
     this.getGlobal();
   },
@@ -49918,14 +49916,15 @@ var app = new Vue({
 
       axios.get('/api/v1/init_globals').then(function (response) {
         _this2.global = response.data.data;
-      });
-    }
-    /*isComponentActive(name) {
-        let _name = 'list';
-        if (!this.isAuthenticated) {
-         }
-    },*/
 
+        if (_this2.isAuthenticated) {
+          _this2.selectedComponent = 'list';
+        }
+      });
+    },
+    isComponentActive: function isComponentActive(name) {
+      return this.selectedComponent === name;
+    }
   },
   computed: {
     isAuthenticated: function isAuthenticated() {

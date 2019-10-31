@@ -37,12 +37,11 @@ const app = new Vue({
     el: '#app',
     data: {
         global: false,
-        selectedComponent: 'list',
+        selectedComponent: 'example',
     },
     mounted() {
         EventVue.$on('resetGlobal', () => {
             this.getGlobal();
-            this.selectedComponent = 'list';
         });
         this.getGlobal();
     },
@@ -51,14 +50,14 @@ const app = new Vue({
         getGlobal() {
             axios.get('/api/v1/init_globals').then((response)=>{
                 this.global = response.data.data;
+                if (this.isAuthenticated) {
+                    this.selectedComponent = 'list';
+                }
             });
         },
-        /*isComponentActive(name) {
-            let _name = 'list';
-            if (!this.isAuthenticated) {
-
-            }
-        },*/
+        isComponentActive(name) {
+            return this.selectedComponent === name;
+        },
     },
 
     computed: {

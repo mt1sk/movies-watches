@@ -55,10 +55,10 @@
         </nav>
 
         <main class="py-4">
-            <example-component v-if="!isAuthenticated && activeComponent!=='auth'"> </example-component>
-            <authentication v-if="!isAuthenticated && activeComponent==='auth'"> </authentication>
+            <example-component v-if="isComponentActive('example')"> </example-component>
+            <authentication v-if="isComponentActive('auth')"> </authentication>
 
-            <movies-list v-if="isAuthenticated && activeComponent==='list'"> </movies-list>
+            <movies-list v-if="isComponentActive('list')"> </movies-list>
         </main>
     </div>
 </body>

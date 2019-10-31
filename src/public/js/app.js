@@ -2041,29 +2041,71 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "MoviesList",
   data: function data() {
     return {
-      movies: []
+      movies: [],
+      form: {
+        errors: []
+      }
     };
   },
   mounted: function mounted() {
-    var _this = this;
+    this.getMovieList();
+  },
+  methods: {
+    getMovieList: function getMovieList() {
+      var _this = this;
 
-    axios.get('/api/v1/movies').then(function (response) {
-      _this.movies = response.data.data;
-    })["catch"](function (error) {
-      if (error.response.status === 401) {
-        location.reload();
-      }
-
-      if (_typeof(error.response.data) === 'object') {
-        /*this.form.errors = _.flatten(_.toArray(error.response.data.errors));*/
-      } else {
-          /*this.form.errors = ['Something went wrong. Please try again.'];*/
+      axios.get('/api/v1/movies').then(function (response) {
+        _this.movies = response.data.data;
+      })["catch"](function (error) {
+        if (error.response.status === 401) {
+          location.reload();
         }
-    });
+
+        if (_typeof(error.response.data.data) === 'object') {
+          if (error.response.data.data.errors) {
+            _this.form.errors = _.flatten(_.toArray(error.response.data.data.errors));
+          } else {
+            _this.form.errors = [error.response.data.data.message];
+          }
+        } else {
+          _this.form.errors = ['Something went wrong. Please try again.'];
+        }
+      });
+    },
+    deleteMovie: function deleteMovie(id) {
+      var _this2 = this;
+
+      axios["delete"]('/api/v1/movies/' + id).then(function (response) {
+        _this2.getMovieList();
+      })["catch"](function (error) {
+        if (_typeof(error.response.data.data) === 'object') {
+          if (error.response.data.data.errors) {
+            _this2.form.errors = _.flatten(_.toArray(error.response.data.data.errors));
+          } else {
+            _this2.form.errors = [error.response.data.data.message];
+          }
+        } else {
+          _this2.form.errors = ['Something went wrong. Please try again.'];
+        }
+      });
+    }
   }
 });
 
@@ -37848,9 +37890,61 @@ var render = function() {
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c(
+              "button",
+              { staticClass: "btn btn-success", attrs: { type: "submit" } },
+              [_vm._v("Add...")]
+            ),
+            _vm._v(" "),
+            _vm.form.errors.length > 0
+              ? _c("div", { staticClass: "alert alert-danger mt-3" }, [
+                  _c(
+                    "ul",
+                    _vm._l(_vm.form.errors, function(error) {
+                      return _c("li", [
+                        _vm._v(
+                          "\n                                " +
+                            _vm._s(error) +
+                            "\n                            "
+                        )
+                      ])
+                    }),
+                    0
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
               "ul",
+              { staticClass: "list-group mt-3" },
               _vm._l(_vm.movies, function(movie) {
-                return _c("li", [_vm._v(_vm._s(movie.name))])
+                return _c(
+                  "li",
+                  {
+                    staticClass:
+                      "list-group-item d-flex justify-content-between align-items-center"
+                  },
+                  [
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(movie.name) +
+                        "\n                            "
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "badge badge-danger",
+                        attrs: { href: "javascript:;" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteMovie(movie.id)
+                          }
+                        }
+                      },
+                      [_vm._v("Del")]
+                    )
+                  ]
+                )
               }),
               0
             )

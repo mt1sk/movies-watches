@@ -6,8 +6,21 @@
                     <div class="card-header">Your movies</div>
 
                     <div class="card-body">
-                        <ul>
-                            <li v-for="movie in movies">{{ movie.name }}</li>
+                        <button type="submit" class="btn btn-success">Add...</button>
+                        <div class="alert alert-danger mt-3" v-if="form.errors.length > 0">
+                            <!--<p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>-->
+                            <ul>
+                                <li v-for="error in form.errors">
+                                    {{ error }}
+                                </li>
+                            </ul>
+                        </div>
+                        <ul class="list-group mt-3">
+                            <li v-for="movie in movies" class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ movie.name }}
+                                <!--<span class="badge badge-primary badge-pill">0</span>-->
+                                <a href="javascript:;" class="badge badge-danger" @click="deleteMovie(movie.id)">Del</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -21,24 +34,55 @@
         name: "MoviesList",
         data() {
             return {
-                movies: []
+                movies: [],
+                form: {
+                    errors: [],
+                },
             }
         },
 
         mounted() {
-            axios.get('/api/v1/movies').then((response)=>{
-                this.movies = response.data.data;
-            }).catch(error => {
-                if (error.response.status === 401) {
-                    location.reload();
-                }
-                if (typeof error.response.data === 'object') {
-                    /*this.form.errors = _.flatten(_.toArray(error.response.data.errors));*/
-                } else {
-                    /*this.form.errors = ['Something went wrong. Please try again.'];*/
-                }
-            });
-        }
+            this.getMovieList();
+        },
+
+        methods: {
+            getMovieList() {
+                axios.get('/api/v1/movies').then((response)=>{
+                    this.movies = response.data.data;
+                }).catch(error => {
+                    if (error.response.status === 401) {
+                        location.reload();
+                    }
+                    if (typeof error.response.data.data === 'object') {
+                        if (error.response.data.data.errors) {
+                            this.form.errors = _.flatten(_.toArray(error.response.data.data.errors));
+                        } else {
+                            this.form.errors = [error.response.data.data.message];
+                        }
+                    } else {
+                        this.form.errors = ['Something went wrong. Please try again.'];
+                    }
+                });
+            },
+
+            deleteMovie(id) {
+                axios.delete('/api/v1/movies/' + id)
+                    .then((response) => {
+                        this.getMovieList();
+                    })
+                    .catch(error => {
+                        if (typeof error.response.data.data === 'object') {
+                            if (error.response.data.data.errors) {
+                                this.form.errors = _.flatten(_.toArray(error.response.data.data.errors));
+                            } else {
+                                this.form.errors = [error.response.data.data.message];
+                            }
+                        } else {
+                            this.form.errors = ['Something went wrong. Please try again.'];
+                        }
+                    });
+            },
+        },
     }
 </script>
 

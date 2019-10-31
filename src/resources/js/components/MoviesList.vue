@@ -50,18 +50,7 @@
                 axios.get('/api/v1/movies').then((response)=>{
                     this.movies = response.data.data;
                 }).catch(error => {
-                    if (error.response.status === 401) {
-                        location.reload();
-                    }
-                    if (typeof error.response.data.data === 'object') {
-                        if (error.response.data.data.errors) {
-                            this.form.errors = _.flatten(_.toArray(error.response.data.data.errors));
-                        } else {
-                            this.form.errors = [error.response.data.data.message];
-                        }
-                    } else {
-                        this.form.errors = ['Something went wrong. Please try again.'];
-                    }
+                    EventVue.$emit('requestFailure', error, this.form);
                 });
             },
 
@@ -71,15 +60,7 @@
                         this.getMovieList();
                     })
                     .catch(error => {
-                        if (typeof error.response.data.data === 'object') {
-                            if (error.response.data.data.errors) {
-                                this.form.errors = _.flatten(_.toArray(error.response.data.data.errors));
-                            } else {
-                                this.form.errors = [error.response.data.data.message];
-                            }
-                        } else {
-                            this.form.errors = ['Something went wrong. Please try again.'];
-                        }
+                        EventVue.$emit('requestFailure', error, this.form);
                     });
             },
         },

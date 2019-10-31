@@ -1840,8 +1840,6 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Tabs_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Tabs.vue */ "./resources/js/components/Tabs.vue");
 /* harmony import */ var _Tab_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Tab.vue */ "./resources/js/components/Tab.vue");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 //
 //
 //
@@ -1946,7 +1944,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       axios.post('/api/v1/login', this.loginForm).then(function (response) {
         _this.onAuthSuccess(response);
       })["catch"](function (error) {
-        _this.onAuthFailure(error, _this.loginForm);
+        EventVue.$emit('requestFailure', error, _this.loginForm);
       });
     },
     register: function register() {
@@ -1955,24 +1953,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       axios.post('/api/v1/register', this.registerForm).then(function (response) {
         _this2.onAuthSuccess(response);
       })["catch"](function (error) {
-        return _this2.onAuthFailure(error, _this2.registerForm);
+        EventVue.$emit('requestFailure', error, _this2.registerForm);
       });
     },
     onAuthSuccess: function onAuthSuccess(response) {
       localStorage.accessToken = response.data.data.token.access_token;
       window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.accessToken;
       EventVue.$emit('resetGlobal');
-    },
-    onAuthFailure: function onAuthFailure(error, form) {
-      if (_typeof(error.response.data.data) === 'object') {
-        if (error.response.data.data.errors) {
-          form.errors = _.flatten(_.toArray(error.response.data.data.errors));
-        } else {
-          form.errors = [error.response.data.data.message];
-        }
-      } else {
-        form.errors = ['Something went wrong. Please try again.'];
-      }
     }
   }
 });
@@ -2021,8 +2008,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 //
 //
 //
@@ -2074,19 +2059,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       axios.get('/api/v1/movies').then(function (response) {
         _this.movies = response.data.data;
       })["catch"](function (error) {
-        if (error.response.status === 401) {
-          location.reload();
-        }
-
-        if (_typeof(error.response.data.data) === 'object') {
-          if (error.response.data.data.errors) {
-            _this.form.errors = _.flatten(_.toArray(error.response.data.data.errors));
-          } else {
-            _this.form.errors = [error.response.data.data.message];
-          }
-        } else {
-          _this.form.errors = ['Something went wrong. Please try again.'];
-        }
+        EventVue.$emit('requestFailure', error, _this.form);
       });
     },
     deleteMovie: function deleteMovie(id) {
@@ -2095,15 +2068,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       axios["delete"]('/api/v1/movies/' + id).then(function (response) {
         _this2.getMovieList();
       })["catch"](function (error) {
-        if (_typeof(error.response.data.data) === 'object') {
-          if (error.response.data.data.errors) {
-            _this2.form.errors = _.flatten(_.toArray(error.response.data.data.errors));
-          } else {
-            _this2.form.errors = [error.response.data.data.message];
-          }
-        } else {
-          _this2.form.errors = ['Something went wrong. Please try again.'];
-        }
+        EventVue.$emit('requestFailure', error, _this2.form);
       });
     }
   }
@@ -50183,6 +50148,8 @@ module.exports = function(module) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -50224,6 +50191,17 @@ var app = new Vue({
       _this.getGlobal();
     });
     this.getGlobal();
+    EventVue.$on('requestFailure', function (error, form) {
+      if (_typeof(error.response.data.data) === 'object') {
+        if (error.response.data.data.errors) {
+          form.errors = _.flatten(_.toArray(error.response.data.data.errors));
+        } else {
+          form.errors = [error.response.data.data.message];
+        }
+      } else {
+        form.errors = ['Something went wrong. Please try again.'];
+      }
+    });
   },
   methods: {
     getGlobal: function getGlobal() {

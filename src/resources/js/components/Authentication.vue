@@ -105,7 +105,7 @@
                         this.onAuthSuccess(response);
                     })
                     .catch(error => {
-                        this.onAuthFailure(error, this.loginForm);
+                        EventVue.$emit('requestFailure', error, this.loginForm);
                     });
             },
 
@@ -114,24 +114,15 @@
                     .then(response => {
                         this.onAuthSuccess(response);
                     })
-                    .catch(error => this.onAuthFailure(error, this.registerForm));
+                    .catch(error => {
+                        EventVue.$emit('requestFailure', error, this.registerForm);
+                    });
             },
 
             onAuthSuccess(response) {
                 localStorage.accessToken = response.data.data.token.access_token;
                 window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.accessToken;
                 EventVue.$emit('resetGlobal');
-            },
-            onAuthFailure(error, form) {
-                if (typeof error.response.data.data === 'object') {
-                    if (error.response.data.data.errors) {
-                        form.errors = _.flatten(_.toArray(error.response.data.data.errors));
-                    } else {
-                        form.errors = [error.response.data.data.message];
-                    }
-                } else {
-                    form.errors = ['Something went wrong. Please try again.'];
-                }
             },
         },
     }

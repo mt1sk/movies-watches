@@ -2065,6 +2065,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.post('/api/v1/movies', this.form).then(function (response) {
         _this.isNewVisible = false;
+        _this.form.errors = [];
 
         _this.$emit('updateMoviesList');
       })["catch"](function (error) {

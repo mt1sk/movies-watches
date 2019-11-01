@@ -56,6 +56,7 @@
                 axios.post('/api/v1/movies', this.form)
                     .then(response => {
                         this.isNewVisible = false;
+                        this.form.errors = [];
                         this.$emit('updateMoviesList');
                     })
                     .catch(error => {

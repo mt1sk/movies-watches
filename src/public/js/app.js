@@ -2118,6 +2118,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "MoviesList",
@@ -38195,20 +38197,27 @@ var render = function() {
                           _vm._s(movie.name) +
                           "\n                            "
                       ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "badge badge-danger",
-                          attrs: { href: "javascript:;" },
-                          on: {
-                            click: function($event) {
-                              return _vm.deleteMovie(movie.id)
+                      _c("div", [
+                        _c(
+                          "span",
+                          { staticClass: "badge badge-primary badge-pill" },
+                          [_vm._v(" " + _vm._s(movie.watches_total))]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "badge badge-danger",
+                            attrs: { href: "javascript:;" },
+                            on: {
+                              click: function($event) {
+                                return _vm.deleteMovie(movie.id)
+                              }
                             }
-                          }
-                        },
-                        [_vm._v("Del")]
-                      )
+                          },
+                          [_vm._v("Del")]
+                        )
+                      ])
                     ]
                   )
                 }),

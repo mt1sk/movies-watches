@@ -18,8 +18,10 @@
                         <ul class="list-group mt-3">
                             <li v-for="movie in movies" class="list-group-item d-flex justify-content-between align-items-center">
                                 {{ movie.name }}
-                                <!--<span class="badge badge-primary badge-pill">0</span>-->
-                                <a href="javascript:;" class="badge badge-danger" @click="deleteMovie(movie.id)">Del</a>
+                                <div>
+                                    <span class="badge badge-primary badge-pill"> {{ movie.watches_total }}</span>
+                                    <a href="javascript:;" class="badge badge-danger" @click="deleteMovie(movie.id)">Del</a>
+                                </div>
                             </li>
                         </ul>
                     </div>

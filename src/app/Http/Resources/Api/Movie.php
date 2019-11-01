@@ -22,6 +22,7 @@ class Movie extends JsonResource
             /*'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'created_at_human' => $this->created_at->diffForHumans(),*/
             'watches' => Watch::collection($this->whenLoaded('watches')),
+            'watches_total' => $this->when(isset($this->watches_total), $this->watches_total),
         ];
     }
 }

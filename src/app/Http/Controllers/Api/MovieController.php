@@ -10,6 +10,7 @@ use App\Movie;
 use App\Watch;
 use Illuminate\Http\Request;
 use App\Http\Resources\Api\Movie as MovieResource;
+use Illuminate\Support\Facades\DB;
 
 class MovieController extends Controller
 {
@@ -23,7 +24,18 @@ class MovieController extends Controller
     {
         $user = $request->user();
         $limit = $request->get('limit', $user->getPerPage());
-        $movies = $user->movies()->orderBy('created_at', 'desc')->paginate($limit);
+        $movies = $user->movies()
+            ->select('movies.*', DB::raw('SUM(watches.count) as watches_total'))
+            ->leftJoin('watches', function($join) {
+                $join->on('movies.id', '=', 'watchable_id')
+                    ->where('watchable_type', '=', 'App\\Movie');
+            })
+            ->groupBy('movies.id')
+            /*->withCount(['watches' => function($query) {
+                $query->select(DB::raw('SUM(count)'));
+            }])*/
+            /*->withCount('watches')*/
+            ->orderBy('created_at', 'desc')->paginate($limit);
         return MovieResource::collection($movies);
     }
 

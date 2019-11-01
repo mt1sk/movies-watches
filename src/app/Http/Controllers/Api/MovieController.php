@@ -35,15 +35,26 @@ class MovieController extends Controller
      */
     public function store(StoreMovieRequest $request)
     {
-        // TODO try to find by hash before creating a movie
+        /**
+         * trying to find the movie by hash before adding,
+         * there's possible to add a watch for the movie instead creating a new movie
+         */
         $movie = new Movie();
         $movie->name = $request->name;
         $movie->hash = $movie->getHash();
-        if (!empty($request->duration)) {
-            $movie->duration = $request->duration;
+        $m = Movie::where('hash', $movie->hash)
+            ->where('user_id', $request->user()->id)
+            ->first();
+
+        if (empty($m)) {
+            if (!empty($request->duration)) {
+                $movie->duration = $request->duration;
+            }
+            $movie->user()->associate($request->user());
+            $movie->save();
+        } else {
+            $movie = $m;
         }
-        $movie->user()->associate($request->user());
-        $movie->save();
 
         $watch = new Watch();
         if (!empty($request->year)) {
@@ -80,6 +91,7 @@ class MovieController extends Controller
     public function update(UpdateMovieRequest $request, Movie $movie)
     {
         $movie->name = $request->get('name', $movie->name);
+        $movie->name = preg_replace('~\s{2,}~', ' ', $movie->name);
         $movie->duration = $request->get('duration', $movie->duration);
         $movie->save();
         return new MovieResource($movie);

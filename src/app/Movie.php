@@ -19,6 +19,13 @@ class Movie extends Model
 
     public function getHash($name = null)
     {
-        return Hash::make(mb_strtolower($name ?? $this->name));
+        return base64_encode(mb_strtolower($name ?? $this->name));
+    }
+
+    public function setNameAttribute($name) {
+        /**
+         * influences on storing movie
+         */
+        $this->attributes['name'] = preg_replace('~\s{2,}~', ' ', $name);
     }
 }

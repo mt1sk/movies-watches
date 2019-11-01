@@ -6,7 +6,7 @@
                     <div class="card-header">Your movies</div>
 
                     <div class="card-body">
-                        <button type="submit" class="btn btn-success">Add...</button>
+                        <movie-add @updateMoviesList="getMovieList"></movie-add>
                         <div class="alert alert-danger mt-3" v-if="form.errors.length > 0">
                             <!--<p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>-->
                             <ul>
@@ -30,8 +30,10 @@
 </template>
 
 <script>
+    import MovieAdd from "./MovieAdd";
     export default {
         name: "MoviesList",
+        components: {MovieAdd},
         data() {
             return {
                 movies: [],

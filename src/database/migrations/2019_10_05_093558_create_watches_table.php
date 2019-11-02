@@ -17,7 +17,9 @@ class CreateWatchesTable extends Migration
             $table->bigIncrements('id');
             $table->string('year', 4)->nullable();
             $table->unsignedTinyInteger('count')->default(1);
-            $table->morphs('watchable');
+            $table->unsignedBigInteger('watchable_id');
+            $table->string('watchable_type', 248);
+            $table->index(['watchable_id', 'watchable_type']);
             $table->timestamps();
         });
     }

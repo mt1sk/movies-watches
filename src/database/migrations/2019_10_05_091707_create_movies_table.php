@@ -16,7 +16,7 @@ class CreateMoviesTable extends Migration
         Schema::create('movies', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('hash')->unique();
+            $table->string('hash', 250)->unique();
             $table->unsignedSmallInteger('duration')->default(0);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

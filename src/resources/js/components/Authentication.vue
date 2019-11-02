@@ -8,60 +8,60 @@
                     <div class="card-body">
                         <tabs>
                             <tab name="Sign in" :selected="true">
-                                <div class="alert alert-danger" v-if="loginForm.errors.length > 0">
-                                    <!--<p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>-->
-                                    <ul>
-                                        <li v-for="error in loginForm.errors">
-                                            {{ error }}
-                                        </li>
-                                    </ul>
-                                </div>
+                                <form @keydown="loginForm.errors.clear($event.target.name)">
+                                    <div class="alert alert-danger" v-if="loginForm.errors.message">
+                                        <p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>
+                                        <p class="mb-0">{{ loginForm.errors.message }}</p>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label for="loginEmail">Email address</label>
-                                    <input v-model="loginForm.email" type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="Enter email">
-                                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="loginPassword">Password</label>
-                                    <input v-model="loginForm.password" type="password" class="form-control" id="loginPassword" placeholder="Password">
-                                </div>
-                                <!--<div class="form-group form-check">
-                                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                                </div>-->
-                                <button type="submit" class="btn btn-primary" @click="login">Log in</button>
+                                    <div class="form-group">
+                                        <label for="loginEmail">Email address</label>
+                                        <input v-model="loginForm.email" name="email" type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                                        <small class="form-text text-danger" v-show="loginForm.errors.has('email')">{{ loginForm.errors.get('email') }}</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="loginPassword">Password</label>
+                                        <input v-model="loginForm.password" name="password" type="password" class="form-control" id="loginPassword" placeholder="Password">
+                                        <small class="form-text text-danger" v-show="loginForm.errors.has('password')">{{ loginForm.errors.get('password') }}</small>
+                                    </div>
+                                    <!--<div class="form-group form-check">
+                                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                                    </div>-->
+                                    <button type="submit" class="btn btn-primary" :disabled="loginForm.errors.any()" @click.prevent="login">Log in</button>
+                                </form>
                             </tab>
 
                             <tab name="Registration">
-                                <div class="alert alert-danger" v-if="registerForm.errors.length > 0">
-                                    <!--<p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>-->
-                                    <ul>
-                                        <li v-for="error in registerForm.errors">
-                                            {{ error }}
-                                        </li>
-                                    </ul>
-                                </div>
+                                <form @keydown="registerForm.errors.clear($event.target.name)">
+                                    <div class="alert alert-danger" v-if="registerForm.errors.message">
+                                        <p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>
+                                        <p class="mb-0">{{ registerForm.errors.message }}</p>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label for="registerEmail">Email address</label>
-                                    <input v-model="registerForm.email" type="email" class="form-control" id="registerEmail" placeholder="Enter email">
-                                </div>
-                                <div class="form-group">
-                                    <label for="registerName">Name</label>
-                                    <input v-model="registerForm.name" type="text" class="form-control" id="registerName" placeholder="Enter name">
-                                </div>
+                                    <div class="form-group">
+                                        <label for="registerEmail">Email address</label>
+                                        <input v-model="registerForm.email" name="email" type="email" class="form-control" id="registerEmail" placeholder="Enter email">
+                                        <small class="form-text text-danger" v-show="registerForm.errors.has('email')">{{ registerForm.errors.get('email') }}</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="registerName">Name</label>
+                                        <input v-model="registerForm.name" name="name" type="text" class="form-control" id="registerName" placeholder="Enter name">
+                                        <small class="form-text text-danger" v-show="registerForm.errors.has('name')">{{ registerForm.errors.get('name') }}</small>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label for="registerPassword">Password</label>
-                                    <input v-model="registerForm.password" type="password" class="form-control" id="registerPassword" placeholder="Password">
-                                </div>
-                                <div class="form-group">
-                                    <label for="registerPasswordConfirmation">Password confirmation</label>
-                                    <input v-model="registerForm.password_confirmation" type="password" class="form-control" id="registerPasswordConfirmation" placeholder="Confirm your password">
-                                </div>
+                                    <div class="form-group">
+                                        <label for="registerPassword">Password</label>
+                                        <input v-model="registerForm.password" name="password" type="password" class="form-control" id="registerPassword" placeholder="Password">
+                                        <small class="form-text text-danger" v-show="registerForm.errors.has('password')">{{ registerForm.errors.get('password') }}</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="registerPasswordConfirmation">Password confirmation</label>
+                                        <input v-model="registerForm.password_confirmation" @keydown="registerForm.errors.clear('password')" type="password" class="form-control" id="registerPasswordConfirmation" placeholder="Confirm your password">
+                                    </div>
 
-                                <button type="submit" class="btn btn-primary" @click="register">Sign up</button>
+                                    <button type="submit" class="btn btn-primary" :disabled="registerForm.errors.any()" @click.prevent="register">Sign up</button>
+                                </form>
                             </tab>
                         </tabs>
                     </div>
@@ -74,6 +74,7 @@
 <script>
     import Tabs from './Tabs.vue';
     import Tab from './Tab.vue';
+    import Form from "../classes/Form";
     export default {
         name: "Authentication",
         components: {
@@ -82,19 +83,17 @@
         },
         data() {
             return {
-                loginForm: {
+                loginForm: new Form({
                     email: '',
                     password: '',
-                    errors: [],
-                },
+                }),
 
-                registerForm: {
+                registerForm: new Form({
                     email: '',
                     name: '',
                     password: '',
                     password_confirmation: '',
-                    errors: [],
-                },
+                }),
             }
         },
 
@@ -105,7 +104,7 @@
                         this.onAuthSuccess(response);
                     })
                     .catch(error => {
-                        EventVue.$emit('requestFailure', error, this.loginForm);
+                        this.loginForm.onFail(error);
                     });
             },
 
@@ -115,7 +114,7 @@
                         this.onAuthSuccess(response);
                     })
                     .catch(error => {
-                        EventVue.$emit('requestFailure', error, this.registerForm);
+                        this.registerForm.onFail(error);
                     });
             },
 

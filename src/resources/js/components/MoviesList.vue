@@ -7,13 +7,9 @@
 
                     <div class="card-body">
                         <movie-add @updateMoviesList="getMovieList"></movie-add>
-                        <div class="alert alert-danger mt-3" v-if="form.errors.length > 0">
-                            <!--<p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>-->
-                            <ul>
-                                <li v-for="error in form.errors">
-                                    {{ error }}
-                                </li>
-                            </ul>
+                        <div class="alert alert-danger mt-3" v-if="form.errors.message">
+                            <p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>
+                            <p class="mb-0">{{ form.errors.message }}</p>
                         </div>
                         <ul class="list-group mt-3">
                             <li v-for="movie in movies" class="list-group-item d-flex justify-content-between align-items-center">
@@ -33,15 +29,14 @@
 
 <script>
     import MovieAdd from "./MovieAdd";
+    import Form from "../classes/Form";
     export default {
         name: "MoviesList",
         components: {MovieAdd},
         data() {
             return {
                 movies: [],
-                form: {
-                    errors: [],
-                },
+                form: new Form(),
             }
         },
 
@@ -54,7 +49,7 @@
                 axios.get('/api/v1/movies').then((response)=>{
                     this.movies = response.data.data;
                 }).catch(error => {
-                    EventVue.$emit('requestFailure', error, this.form);
+                    this.form.onFail(error);
                 });
             },
 
@@ -64,7 +59,7 @@
                         this.getMovieList();
                     })
                     .catch(error => {
-                        EventVue.$emit('requestFailure', error, this.form);
+                        this.form.onFail(error);
                     });
             },
         },

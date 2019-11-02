@@ -44,18 +44,6 @@ const app = new Vue({
             this.getGlobal();
         });
         this.getGlobal();
-
-        EventVue.$on('requestFailure', (error, form) => {
-            if (typeof error.response.data.data === 'object') {
-                if (error.response.data.data.errors) {
-                    form.errors = _.flatten(_.toArray(error.response.data.data.errors));
-                } else {
-                    form.errors = [error.response.data.data.message];
-                }
-            } else {
-                form.errors = ['Something went wrong. Please try again.'];
-            }
-        });
     },
 
     methods: {

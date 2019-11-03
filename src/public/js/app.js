@@ -1941,19 +1941,15 @@ __webpack_require__.r(__webpack_exports__);
     login: function login() {
       var _this = this;
 
-      axios.post('/api/v1/login', this.loginForm).then(function (response) {
+      this.loginForm.post('/api/v1/login').then(function (response) {
         _this.onAuthSuccess(response);
-      })["catch"](function (error) {
-        _this.loginForm.onFail(error);
       });
     },
     register: function register() {
       var _this2 = this;
 
-      axios.post('/api/v1/register', this.registerForm).then(function (response) {
+      this.registerForm.post('/api/v1/register').then(function (response) {
         _this2.onAuthSuccess(response);
-      })["catch"](function (error) {
-        _this2.registerForm.onFail(error);
       });
     },
     onAuthSuccess: function onAuthSuccess(response) {
@@ -2135,19 +2131,15 @@ __webpack_require__.r(__webpack_exports__);
     getMovieList: function getMovieList() {
       var _this = this;
 
-      axios.get('/api/v1/movies').then(function (response) {
+      this.form.get('/api/v1/movies').then(function (response) {
         _this.movies = response.data.data;
-      })["catch"](function (error) {
-        _this.form.onFail(error);
       });
     },
     deleteMovie: function deleteMovie(id) {
       var _this2 = this;
 
-      axios["delete"]('/api/v1/movies/' + id).then(function (response) {
+      this.form["delete"]('/api/v1/movies/' + id).then(function (response) {
         _this2.getMovieList();
-      })["catch"](function (error) {
-        _this2.form.onFail(error);
       });
     }
   }

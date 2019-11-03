@@ -46,21 +46,15 @@
 
         methods: {
             getMovieList() {
-                axios.get('/api/v1/movies').then((response)=>{
+                this.form.get('/api/v1/movies').then(response => {
                     this.movies = response.data.data;
-                }).catch(error => {
-                    this.form.onFail(error);
                 });
             },
 
             deleteMovie(id) {
-                axios.delete('/api/v1/movies/' + id)
-                    .then((response) => {
-                        this.getMovieList();
-                    })
-                    .catch(error => {
-                        this.form.onFail(error);
-                    });
+                this.form.delete('/api/v1/movies/' + id).then(response => {
+                    this.getMovieList();
+                });
             },
         },
     }

@@ -99,23 +99,15 @@
 
         methods: {
             login() {
-                axios.post('/api/v1/login', this.loginForm)
-                    .then(response => {
-                        this.onAuthSuccess(response);
-                    })
-                    .catch(error => {
-                        this.loginForm.onFail(error);
-                    });
+                this.loginForm.post('/api/v1/login').then(response => {
+                    this.onAuthSuccess(response);
+                });
             },
 
             register() {
-                axios.post('/api/v1/register', this.registerForm)
-                    .then(response => {
-                        this.onAuthSuccess(response);
-                    })
-                    .catch(error => {
-                        this.registerForm.onFail(error);
-                    });
+                this.registerForm.post('/api/v1/register').then(response => {
+                    this.onAuthSuccess(response);
+                });
             },
 
             onAuthSuccess(response) {

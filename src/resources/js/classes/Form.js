@@ -45,9 +45,17 @@ export default class Form {
     }
 
     submit(requestMethod, url) {
-        axios[requestMethod](url, this.data())
-            .then(this.onSuccess.bind(this))
-            .catch(this.onFail.bind(this));
+        return new Promise((resolve, reject) => {
+            axios[requestMethod](url, this.data())
+                .then(response => {
+                    this.onSuccess(response);
+                    resolve(response);
+                })
+                .catch(error => {
+                    this.onFail(error);
+                    reject(error);
+                });
+        });
     }
 
     get(url) {

@@ -53,15 +53,10 @@
 
         methods: {
             addMovie() {
-                axios.post('/api/v1/movies', this.form)
-                    .then(response => {
-                        this.isNewVisible = false;
-                        this.form.reset();
-                        this.$emit('updateMoviesList');
-                    })
-                    .catch(error => {
-                        this.form.onFail(error);
-                    });
+                this.form.post('/api/v1/movies').then(response => {
+                    this.isNewVisible = false;
+                    this.$emit('updateMoviesList');
+                });
             },
         },
     }

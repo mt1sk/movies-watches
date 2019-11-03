@@ -2064,14 +2064,10 @@ __webpack_require__.r(__webpack_exports__);
     addMovie: function addMovie() {
       var _this = this;
 
-      axios.post('/api/v1/movies', this.form).then(function (response) {
+      this.form.post('/api/v1/movies').then(function (response) {
         _this.isNewVisible = false;
 
-        _this.form.reset();
-
         _this.$emit('updateMoviesList');
-      })["catch"](function (error) {
-        _this.form.onFail(error);
       });
     }
   }
@@ -50919,7 +50915,19 @@ function () {
   }, {
     key: "submit",
     value: function submit(requestMethod, url) {
-      axios[requestMethod](url, this.data()).then(this.onSuccess.bind(this))["catch"](this.onFail.bind(this));
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        axios[requestMethod](url, _this.data()).then(function (response) {
+          _this.onSuccess(response);
+
+          resolve(response);
+        })["catch"](function (error) {
+          _this.onFail(error);
+
+          reject(error);
+        });
+      });
     }
   }, {
     key: "get",

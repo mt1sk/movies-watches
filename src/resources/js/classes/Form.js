@@ -1,6 +1,7 @@
 import ErrorBag from "./ErrorBag";
 
 export default class Form {
+
     constructor(data) {
         this.originalData = data;
 
@@ -11,13 +12,24 @@ export default class Form {
         this.errors = new ErrorBag();
     }
 
+    data() {
+        let data = {};
+        for (let property in this.originalData) {
+            data[property] = this[property];
+        }
+        return data;
+    }
+
     reset() {
         for (let field in this.originalData) {
             this[field] = this.originalData[field];
-            /*delete this[field];*/
         }
 
         this.errors.clear();
+    }
+
+    onSuccess(response) {
+        this.reset();
     }
 
     onFail(error) {
@@ -30,5 +42,27 @@ export default class Form {
         } else {
             this.errors.message = 'Please reload the page and try again.';
         }
+    }
+
+    submit(requestMethod, url) {
+        axios[requestMethod](url, this.data())
+            .then(this.onSuccess.bind(this))
+            .catch(this.onFail.bind(this));
+    }
+
+    get(url) {
+        return this.submit('get', url);
+    }
+
+    post(url) {
+        return this.submit('post', url);
+    }
+
+    put(url) {
+        return this.submit('put', url);
+    }
+
+    delete(url) {
+        return this.submit('delete', url);
     }
 }

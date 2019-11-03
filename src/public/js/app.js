@@ -50879,14 +50879,29 @@ function () {
   }
 
   _createClass(Form, [{
+    key: "data",
+    value: function data() {
+      var data = {};
+
+      for (var property in this.originalData) {
+        data[property] = this[property];
+      }
+
+      return data;
+    }
+  }, {
     key: "reset",
     value: function reset() {
       for (var field in this.originalData) {
         this[field] = this.originalData[field];
-        /*delete this[field];*/
       }
 
       this.errors.clear();
+    }
+  }, {
+    key: "onSuccess",
+    value: function onSuccess(response) {
+      this.reset();
     }
   }, {
     key: "onFail",
@@ -50900,6 +50915,31 @@ function () {
       } else {
         this.errors.message = 'Please reload the page and try again.';
       }
+    }
+  }, {
+    key: "submit",
+    value: function submit(requestMethod, url) {
+      axios[requestMethod](url, this.data()).then(this.onSuccess.bind(this))["catch"](this.onFail.bind(this));
+    }
+  }, {
+    key: "get",
+    value: function get(url) {
+      return this.submit('get', url);
+    }
+  }, {
+    key: "post",
+    value: function post(url) {
+      return this.submit('post', url);
+    }
+  }, {
+    key: "put",
+    value: function put(url) {
+      return this.submit('put', url);
+    }
+  }, {
+    key: "delete",
+    value: function _delete(url) {
+      return this.submit('delete', url);
     }
   }]);
 

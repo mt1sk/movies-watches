@@ -53577,19 +53577,37 @@ Vue.component('authentication', __webpack_require__(/*! ./components/Authenticat
 
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
-/*window.sharedData = {
-    user: null,
-    app_name: '',
-    root_url: '',
-    isAuthenticated() {
-        return this.user !== null;
-    },
-};*/
+window.sharedData = {
+  user: null,
+  app_name: '',
+  root_url: '',
+  isAuthenticated: function isAuthenticated() {
+    return this.user !== null;
+  }
+};
+_routes__WEBPACK_IMPORTED_MODULE_1__["default"].beforeEach(function (to, from, next) {
+  if (sharedData.isAuthenticated()) {
+    if (to.path === '/auth') {
+      next({
+        path: '/movies'
+      });
+      return;
+    }
+  } else {
+    if (['/', '/auth'].indexOf(to.path) === -1) {
+      next({
+        path: '/auth'
+      });
+      return;
+    }
+  }
 
+  next();
+});
 var app = new Vue({
   el: '#app',
   data: {
-    global: false,
+    global: sharedData,
     selectedComponent: 'example'
   },
   mounted: function mounted() {
@@ -53605,10 +53623,12 @@ var app = new Vue({
       var _this2 = this;
 
       axios.get('/api/v1/init_globals').then(function (response) {
-        _this2.global = response.data.data;
+        for (var field in response.data.data) {
+          _this2.global[field] = response.data.data[field];
+        }
 
         if (_this2.isAuthenticated) {
-          _this2.selectedComponent = 'list';
+          _this2.$router.push('/movies');
         }
       });
     },
@@ -53618,7 +53638,7 @@ var app = new Vue({
   },
   computed: {
     isAuthenticated: function isAuthenticated() {
-      return this.global.user !== undefined && this.global.user !== null;
+      return this.global.isAuthenticated();
     }
   },
   router: _routes__WEBPACK_IMPORTED_MODULE_1__["default"]

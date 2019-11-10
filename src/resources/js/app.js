@@ -39,19 +39,33 @@ Vue.use(VueRouter);
 import router from './routes';
 
 
-/*window.sharedData = {
+window.sharedData = {
     user: null,
     app_name: '',
     root_url: '',
     isAuthenticated() {
         return this.user !== null;
     },
-};*/
+};
+router.beforeEach((to, from, next) => {
+    if (sharedData.isAuthenticated()) {
+        if (to.path === '/auth') {
+            next({path: '/movies'});
+            return;
+        }
+    } else {
+        if (['/', '/auth'].indexOf(to.path) === -1) {
+            next({path: '/auth'});
+            return;
+        }
+    }
+    next();
+});
 
 const app = new Vue({
     el: '#app',
     data: {
-        global: false,
+        global: sharedData,
         selectedComponent: 'example',
     },
     mounted() {
@@ -64,9 +78,11 @@ const app = new Vue({
     methods: {
         getGlobal() {
             axios.get('/api/v1/init_globals').then((response)=>{
-                this.global = response.data.data;
+                for (let field in response.data.data) {
+                    this.global[field] = response.data.data[field];
+                }
                 if (this.isAuthenticated) {
-                    this.selectedComponent = 'list';
+                    this.$router.push('/movies');
                 }
             });
         },
@@ -77,7 +93,7 @@ const app = new Vue({
 
     computed: {
         isAuthenticated() {
-            return this.global.user !== undefined && this.global.user !== null;
+            return this.global.isAuthenticated();
         },
     },
 

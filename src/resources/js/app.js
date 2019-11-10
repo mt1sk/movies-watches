@@ -33,6 +33,21 @@ Vue.component('authentication', require('./components/Authentication.vue').defau
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
+
+import router from './routes';
+
+
+/*window.sharedData = {
+    user: null,
+    app_name: '',
+    root_url: '',
+    isAuthenticated() {
+        return this.user !== null;
+    },
+};*/
+
 const app = new Vue({
     el: '#app',
     data: {
@@ -64,5 +79,7 @@ const app = new Vue({
         isAuthenticated() {
             return this.global.user !== undefined && this.global.user !== null;
         },
-    }
+    },
+
+    router,
 });

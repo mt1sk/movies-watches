@@ -39,26 +39,32 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
-                        <li class="nav-item" v-if="!isAuthenticated">
+                        <router-link v-if="!isAuthenticated" tag="li" active-class="is-active" to="/auth">
+                            <a class="nav-link">Auth</a>
+                        </router-link>
+                        {{--<li class="nav-item" v-if="!isAuthenticated">
                             <a class="nav-link" href="#" @click="selectedComponent = 'auth'">Auth</a>
-                        </li>
+                        </li>--}}
 
-                        <li class="nav-item" v-if="isAuthenticated">
+                        <router-link v-if="isAuthenticated" tag="li" active-class="is-active" to="/movies">
+                            <a class="nav-link">List</a>
+                        </router-link>
+                        <router-link v-if="isAuthenticated" tag="li" active-class="is-active" to="/">
+                            <a class="nav-link">Home</a>
+                        </router-link>
+                        {{--<li class="nav-item" v-if="isAuthenticated">
                             <a class="nav-link" href="#" @click="selectedComponent = 'list'">List</a>
                         </li>
                         <li class="nav-item" v-if="isAuthenticated">
                             <a class="nav-link" href="#" @click="selectedComponent = 'user_info'">User info</a>
-                        </li>
+                        </li>--}}
                     </ul>
                 </div>
             </div>
         </nav>
 
         <main class="py-4">
-            <example-component v-if="isComponentActive('example')"> </example-component>
-            <authentication v-if="isComponentActive('auth')"> </authentication>
-
-            <movies-list v-if="isComponentActive('list')"> </movies-list>
+            <router-view></router-view>
         </main>
     </div>
 </body>

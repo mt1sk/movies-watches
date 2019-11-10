@@ -53,7 +53,7 @@ class MovieController extends Controller
          */
         $movie = new Movie();
         $movie->name = $request->name;
-        $movie->hash = $movie->getHash();
+        $movie->hash = $movie->hash;
         $m = Movie::where('hash', $movie->hash)
             ->where('user_id', $request->user()->id)
             ->first();
@@ -103,7 +103,12 @@ class MovieController extends Controller
     public function update(UpdateMovieRequest $request, Movie $movie)
     {
         $movie->name = $request->get('name', $movie->name);
-        $movie->name = preg_replace('~\s{2,}~', ' ', $movie->name);
+        $movie->hash = $movie->hash;
+        $m = Movie::where('hash', $movie->hash)
+            ->where('user_id', $request->user()->id)->first();
+        if (!empty($m) && $m->id != $movie->id) {
+            return response()->json(['data' => ['message'=> 'A movie with this name is already exist.']], 422);
+        }
         $movie->duration = $request->get('duration', $movie->duration);
         $movie->save();
         return new MovieResource($movie);

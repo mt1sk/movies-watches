@@ -17,9 +17,8 @@ class Movie extends Model
         return $this->morphMany(Watch::class, 'watchable');
     }
 
-    public function getHash($name = null)
-    {
-        return base64_encode(mb_strtolower($name ?? $this->name));
+    public function getHashAttribute() {
+        return base64_encode(mb_strtolower($this->name));
     }
 
     public function setNameAttribute($name) {

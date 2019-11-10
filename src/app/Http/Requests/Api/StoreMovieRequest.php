@@ -25,7 +25,7 @@ class StoreMovieRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'duration' => 'integer|nullable|min:1|max:65365',
+            'duration' => 'integer|nullable|min:0|max:65365',
             'year' => 'string|nullable|max:4',
             'count' => 'integer|nullable|min:1|max:255',
         ];

@@ -24,8 +24,8 @@ class UpdateMovieRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'max:255',
-            'duration' => 'integer|nullable|min:1|max:65365',
+            'name' => 'required|max:255',
+            'duration' => 'integer|min:0|max:65365',
         ];
     }
 }

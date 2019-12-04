@@ -2071,6 +2071,95 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MovieEdit.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MovieEdit.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _classes_Form__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../classes/Form */ "./resources/js/classes/Form.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "MovieEdit",
+  data: function data() {
+    return {
+      watches: [],
+      movieForm: new _classes_Form__WEBPACK_IMPORTED_MODULE_0__["default"]({
+        name: '',
+        duration: 0
+      })
+    };
+  },
+  mounted: function mounted() {
+    this.getMovie(this.$route.params.id);
+  },
+  beforeRouteUpdate: function beforeRouteUpdate(to, from, next) {
+    this.getMovie(to.params.id);
+    next();
+  },
+  methods: {
+    getMovie: function getMovie(id) {
+      var _this = this;
+
+      this.movieForm.get('/api/v1/movies/' + id).then(function (response) {
+        var movie = response.data.data;
+
+        for (var field in _this.movieForm.data()) {
+          _this.movieForm[field] = movie[field];
+        }
+
+        _this.watches = movie.watches;
+      });
+      console.log('getting movie with ID #' + id);
+    },
+    saveMovie: function saveMovie() {
+      var _this2 = this;
+
+      this.movieForm.patch('/api/v1/movies/' + this.$route.params.id).then(function (response) {
+        var movie = response.data.data;
+
+        for (var field in _this2.movieForm.data()) {
+          _this2.movieForm[field] = movie[field];
+        }
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MoviesList.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MoviesList.vue?vue&type=script&lang=js& ***!
@@ -38321,6 +38410,180 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MovieEdit.vue?vue&type=template&id=71271302&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MovieEdit.vue?vue&type=template&id=71271302&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container pt-2" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c(
+        "form",
+        {
+          staticClass: "mt-2",
+          on: {
+            keydown: function($event) {
+              return _vm.movieForm.errors.clear($event.target.name)
+            }
+          }
+        },
+        [
+          _vm.movieForm.errors.message
+            ? _c("div", { staticClass: "alert alert-danger mt-3" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("p", { staticClass: "mb-0" }, [
+                  _vm._v(_vm._s(_vm.movieForm.errors.message))
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-row" }, [
+            _c("div", { staticClass: "form-group col-sm-12" }, [
+              _c("label", { attrs: { for: "movieName" } }, [_vm._v("Title")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.movieForm.name,
+                    expression: "movieForm.name"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  name: "name",
+                  id: "movieName",
+                  placeholder: "Title"
+                },
+                domProps: { value: _vm.movieForm.name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.movieForm, "name", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "small",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.movieForm.errors.has("name"),
+                      expression: "movieForm.errors.has('name')"
+                    }
+                  ],
+                  staticClass: "form-text text-danger"
+                },
+                [_vm._v(_vm._s(_vm.movieForm.errors.get("name")))]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-row" }, [
+            _c("div", { staticClass: "form-group col-sm-12" }, [
+              _c("label", { attrs: { for: "movieDuration" } }, [
+                _vm._v("Movie duration")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.movieForm.duration,
+                    expression: "movieForm.duration"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "text",
+                  name: "duration",
+                  id: "movieDuration",
+                  placeholder: "Movie duration"
+                },
+                domProps: { value: _vm.movieForm.duration },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.movieForm, "duration", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "small",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.movieForm.errors.has("duration"),
+                      expression: "movieForm.errors.has('duration')"
+                    }
+                  ],
+                  staticClass: "form-text text-danger"
+                },
+                [_vm._v(_vm._s(_vm.movieForm.errors.get("duration")))]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-success",
+              attrs: { type: "submit", disabled: _vm.movieForm.errors.any() },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.saveMovie($event)
+                }
+              }
+            },
+            [_vm._v("Save...")]
+          )
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "mb-0" }, [
+      _c("strong", [_vm._v("Whoops!")]),
+      _vm._v(" Something went wrong!")
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MoviesList.vue?vue&type=template&id=0f56f6ac&scoped=true&":
 /*!*************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MoviesList.vue?vue&type=template&id=0f56f6ac&scoped=true& ***!
@@ -38369,11 +38632,16 @@ var render = function() {
                         "list-group-item d-flex justify-content-between align-items-center"
                     },
                     [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(movie.name) +
-                          "\n                            "
+                      _c(
+                        "router-link",
+                        {
+                          attrs: {
+                            to: { name: "movie_edit", params: { id: movie.id } }
+                          }
+                        },
+                        [_vm._v(_vm._s(movie.name))]
                       ),
+                      _vm._v(" "),
                       _c("div", [
                         _c(
                           "span",
@@ -38395,7 +38663,8 @@ var render = function() {
                           [_vm._v("Del")]
                         )
                       ])
-                    ]
+                    ],
+                    1
                   )
                 }),
                 0
@@ -53869,6 +54138,11 @@ function () {
       return this.submit('put', url);
     }
   }, {
+    key: "patch",
+    value: function patch(url) {
+      return this.submit('patch', url);
+    }
+  }, {
     key: "delete",
     value: function _delete(url) {
       return this.submit('delete', url);
@@ -54084,6 +54358,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MovieAdd_vue_vue_type_template_id_7481383c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MovieAdd_vue_vue_type_template_id_7481383c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/MovieEdit.vue":
+/*!***********************************************!*\
+  !*** ./resources/js/components/MovieEdit.vue ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _MovieEdit_vue_vue_type_template_id_71271302_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MovieEdit.vue?vue&type=template&id=71271302&scoped=true& */ "./resources/js/components/MovieEdit.vue?vue&type=template&id=71271302&scoped=true&");
+/* harmony import */ var _MovieEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MovieEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/MovieEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _MovieEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _MovieEdit_vue_vue_type_template_id_71271302_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _MovieEdit_vue_vue_type_template_id_71271302_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "71271302",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/MovieEdit.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/MovieEdit.vue?vue&type=script&lang=js&":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/MovieEdit.vue?vue&type=script&lang=js& ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MovieEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./MovieEdit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MovieEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MovieEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/MovieEdit.vue?vue&type=template&id=71271302&scoped=true&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/MovieEdit.vue?vue&type=template&id=71271302&scoped=true& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MovieEdit_vue_vue_type_template_id_71271302_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./MovieEdit.vue?vue&type=template&id=71271302&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MovieEdit.vue?vue&type=template&id=71271302&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MovieEdit_vue_vue_type_template_id_71271302_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MovieEdit_vue_vue_type_template_id_71271302_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -54316,6 +54659,10 @@ var routes = [{
 }, {
   path: '/movies',
   component: __webpack_require__(/*! ./components/MoviesList */ "./resources/js/components/MoviesList.vue")["default"]
+}, {
+  path: '/movies/:id',
+  name: 'movie_edit',
+  component: __webpack_require__(/*! ./components/MovieEdit */ "./resources/js/components/MovieEdit.vue")["default"]
 }];
 /* harmony default export */ __webpack_exports__["default"] = (new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   routes: routes

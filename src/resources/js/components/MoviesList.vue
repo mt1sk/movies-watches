@@ -13,7 +13,7 @@
                         </div>
                         <ul class="list-group mt-3">
                             <li v-for="movie in movies" class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ movie.name }}
+                                <router-link :to="{name: 'movie_edit', params: {id: movie.id}}">{{ movie.name }}</router-link>
                                 <div>
                                     <span class="badge badge-primary badge-pill"> {{ movie.watches_total }}</span>
                                     <a href="javascript:;" class="badge badge-danger" @click="deleteMovie(movie.id)">Del</a>

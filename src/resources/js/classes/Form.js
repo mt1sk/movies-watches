@@ -70,6 +70,10 @@ export default class Form {
         return this.submit('put', url);
     }
 
+    patch(url) {
+        return this.submit('patch', url);
+    }
+
     delete(url) {
         return this.submit('delete', url);
     }

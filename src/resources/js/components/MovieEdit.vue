@@ -1,37 +1,51 @@
 <template>
     <!--<div>{{ movieForm.name }}</div>-->
-    <div class="container pt-2">
-        <div class="row justify-content-center">
-            <form class="mt-2" @keydown="movieForm.errors.clear($event.target.name)">
-                <div class="alert alert-danger mt-3" v-if="movieForm.errors.message">
-                    <p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>
-                    <p class="mb-0">{{ movieForm.errors.message }}</p>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-sm-12">
-                        <label for="movieName">Title</label>
-                        <input v-model="movieForm.name" type="text" name="name" class="form-control" id="movieName" placeholder="Title">
-                        <small class="form-text text-danger" v-show="movieForm.errors.has('name')">{{ movieForm.errors.get('name') }}</small>
+    <div>
+        <div class="container pt-2">
+            <div class="row justify-content-center">
+                <form class="mt-2" @keydown="movieForm.errors.clear($event.target.name)">
+                    <div class="alert alert-danger mt-3" v-if="movieForm.errors.message">
+                        <p class="mb-0"><strong>Whoops!</strong> Something went wrong!</p>
+                        <p class="mb-0">{{ movieForm.errors.message }}</p>
                     </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-sm-12">
-                        <label for="movieDuration">Movie duration</label>
-                        <input v-model="movieForm.duration" type="text" name="duration" class="form-control" id="movieDuration" placeholder="Movie duration">
-                        <small class="form-text text-danger" v-show="movieForm.errors.has('duration')">{{ movieForm.errors.get('duration') }}</small>
+                    <div class="form-row">
+                        <div class="form-group col-sm-12">
+                            <label for="movieName">Title</label>
+                            <input v-model="movieForm.name" type="text" name="name" class="form-control" id="movieName" placeholder="Title">
+                            <small class="form-text text-danger" v-show="movieForm.errors.has('name')">{{ movieForm.errors.get('name') }}</small>
+                        </div>
                     </div>
-                </div>
-                <button type="submit" class="btn btn-success" :disabled="movieForm.errors.any()" @click.prevent="saveMovie">Save...</button>
-            </form>
+                    <div class="form-row">
+                        <div class="form-group col-sm-12">
+                            <label for="movieDuration">Movie duration</label>
+                            <input v-model="movieForm.duration" type="text" name="duration" class="form-control" id="movieDuration" placeholder="Movie duration">
+                            <small class="form-text text-danger" v-show="movieForm.errors.has('duration')">{{ movieForm.errors.get('duration') }}</small>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success" :disabled="movieForm.errors.any()" @click.prevent="saveMovie">Save...</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="container pt-4" v-if="watches.length > 0">
+            <div class="row justify-content-center">
+                <h3>Watches list</h3>
+            </div>
+            <movie-watch v-for="watch in watches" :key="watch.id" :watch="watch"></movie-watch>
         </div>
     </div>
 </template>
 
 <script>
     import Form from "../classes/Form";
+    import MovieWatch from "./MovieWatch";
 
     export default {
         name: "MovieEdit",
+
+        components: {
+            MovieWatch,
+        },
 
         data() {
             return {
@@ -63,7 +77,6 @@
 
                         this.watches = movie.watches;
                     });
-                console.log('getting movie with ID #' + id);
             },
 
             saveMovie() {

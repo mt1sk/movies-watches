@@ -89,7 +89,9 @@ class MovieController extends Controller
      */
     public function show(Movie $movie)
     {
-        $movie->load('watches');
+        $movie->load(array('watches' => function($query) {
+            $query->orderBy('created_at', 'DESC');
+        }));
         return new MovieResource($movie);
     }
 

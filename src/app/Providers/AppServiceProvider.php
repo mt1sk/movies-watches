@@ -26,10 +26,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         User::deleting(function (User $user) {
-            $user->movies()->delete();
+            $user->movies->each->delete();
         });
         Movie::deleting(function (Movie $movie) {
-            $movie->watches()->delete();
+            $movie->watches->each->delete();
         });
     }
 }

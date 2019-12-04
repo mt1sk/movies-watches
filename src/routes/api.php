@@ -38,5 +38,12 @@ Route::group(['namespace'=>'Api'], function () {
             Route::delete('/{movie}', 'MovieController@destroy')->name('api_movie_delete')
                 ->middleware('can:api-movie-delete,movie');
         });
+
+        Route::prefix('/watches')->group(function () {
+            Route::patch('/{watch}', 'WatchController@update')->name('api_watch_update')
+                ->middleware('can:api-watch-update,watch');
+            /*Route::delete('/{watch}', 'WatchController@destroy')->name('api_watch_delete')
+                ->middleware('can:api-watch-delete,watch');*/
+        });
     });
 });

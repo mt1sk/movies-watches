@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Movie;
 use App\User;
+use App\Watch;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
@@ -36,6 +37,13 @@ class AuthServiceProvider extends ServiceProvider
         });
         Gate::define('api-movie-delete', function (User $user, Movie $movie) {
             return $user->ownsMovie($movie);
+        });
+
+        Gate::define('api-watch-update', function (User $user, Watch $watch) {
+            if ($watch->watchable instanceof Movie) {
+                return $user->ownsMovie($watch->watchable);
+            }
+            return false;
         });
     }
 }

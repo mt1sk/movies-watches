@@ -45,5 +45,11 @@ class AuthServiceProvider extends ServiceProvider
             }
             return false;
         });
+        Gate::define('api-watch-delete', function (User $user, Watch $watch) {
+            if ($watch->watchable instanceof Movie) {
+                return $user->ownsMovie($watch->watchable);
+            }
+            return false;
+        });
     }
 }

@@ -42,8 +42,8 @@ Route::group(['namespace'=>'Api'], function () {
         Route::prefix('/watches')->group(function () {
             Route::patch('/{watch}', 'WatchController@update')->name('api_watch_update')
                 ->middleware('can:api-watch-update,watch');
-            /*Route::delete('/{watch}', 'WatchController@destroy')->name('api_watch_delete')
-                ->middleware('can:api-watch-delete,watch');*/
+            Route::delete('/{watch}', 'WatchController@destroy')->name('api_watch_delete')
+                ->middleware('can:api-watch-delete,watch');
         });
     });
 });

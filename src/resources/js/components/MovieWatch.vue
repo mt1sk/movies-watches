@@ -20,10 +20,13 @@
                     </small>
                 </div>
 
-                <div class="form-group col-2">
+                <div class="form-group col-1">
                     <button type="submit" class="btn btn-success" :disabled="watchForm.errors.any()" @click.prevent="saveWatch">
-                        OK
+                        &#10004;
                     </button>
+                </div>
+                <div class="form-group col-1">
+                    <a href="#" class="btn btn-danger" @click.prevent="deleteWatch">X</a>
                 </div>
             </div>
         </form>
@@ -61,6 +64,12 @@
                         for (let field in this.watchForm.data()) {
                             this.watchForm[field] = response.data.data[field];
                         }
+                    });
+            },
+            deleteWatch() {
+                this.watchForm.delete('/api/v1/watches/' + this.watch.id)
+                    .then(response => {
+                        this.$emit('watchDeleted');
                     });
             },
         },

@@ -66,6 +66,7 @@ class WatchController extends Controller
      */
     public function destroy(Watch $watch)
     {
-        //
+        $watch->delete();
+        return response(null, 204);
     }
 }

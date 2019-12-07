@@ -31,7 +31,7 @@
             <div class="row justify-content-center">
                 <h3>Watches list</h3>
             </div>
-            <movie-watch v-for="watch in watches" :key="watch.id" :watch="watch"></movie-watch>
+            <movie-watch v-for="watch in watches" :key="watch.id" :watch="watch" @watchDeleted="removeWatch(watch.id)"></movie-watch>
         </div>
     </div>
 </template>
@@ -87,6 +87,12 @@
                             this.movieForm[field] = movie[field];
                         }
                     });
+            },
+
+            removeWatch(id) {
+                const index = this.watches.findIndex(watch => watch.id == id);
+                if (index === -1) return;
+                this.watches.splice(index, 1);
             }
         },
     }

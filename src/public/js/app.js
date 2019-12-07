@@ -2167,6 +2167,13 @@ __webpack_require__.r(__webpack_exports__);
           _this2.movieForm[field] = movie[field];
         }
       });
+    },
+    removeWatch: function removeWatch(id) {
+      var index = this.watches.findIndex(function (watch) {
+        return watch.id == id;
+      });
+      if (index === -1) return;
+      this.watches.splice(index, 1);
     }
   }
 });
@@ -2183,6 +2190,9 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _classes_Form__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../classes/Form */ "./resources/js/classes/Form.js");
+//
+//
+//
 //
 //
 //
@@ -2243,6 +2253,13 @@ __webpack_require__.r(__webpack_exports__);
         for (var field in _this.watchForm.data()) {
           _this.watchForm[field] = response.data.data[field];
         }
+      });
+    },
+    deleteWatch: function deleteWatch() {
+      var _this2 = this;
+
+      this.watchForm["delete"]('/api/v1/watches/' + this.watch.id).then(function (response) {
+        _this2.$emit('watchDeleted');
       });
     }
   }
@@ -38668,7 +38685,12 @@ var render = function() {
             _vm._l(_vm.watches, function(watch) {
               return _c("movie-watch", {
                 key: watch.id,
-                attrs: { watch: watch }
+                attrs: { watch: watch },
+                on: {
+                  watchDeleted: function($event) {
+                    return _vm.removeWatch(watch.id)
+                  }
+                }
               })
             })
           ],
@@ -38842,7 +38864,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group col-2" }, [
+          _c("div", { staticClass: "form-group col-1" }, [
             _c(
               "button",
               {
@@ -38855,7 +38877,24 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("\n                    OK\n                ")]
+              [_vm._v("\n                    ✔\n                ")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group col-1" }, [
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-danger",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.deleteWatch($event)
+                  }
+                }
+              },
+              [_vm._v("X")]
             )
           ])
         ])

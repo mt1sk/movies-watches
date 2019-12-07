@@ -67,10 +67,12 @@
                     });
             },
             deleteWatch() {
-                this.watchForm.delete('/api/v1/watches/' + this.watch.id)
-                    .then(response => {
-                        this.$emit('watchDeleted');
-                    });
+                if (confirm('Are you sure ?!')) {
+                    this.watchForm.delete('/api/v1/watches/' + this.watch.id)
+                        .then(response => {
+                            this.$emit('watchDeleted');
+                        });
+                }
             },
         },
     }

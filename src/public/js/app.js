@@ -2258,9 +2258,11 @@ __webpack_require__.r(__webpack_exports__);
     deleteWatch: function deleteWatch() {
       var _this2 = this;
 
-      this.watchForm["delete"]('/api/v1/watches/' + this.watch.id).then(function (response) {
-        _this2.$emit('watchDeleted');
-      });
+      if (confirm('Are you sure ?!')) {
+        this.watchForm["delete"]('/api/v1/watches/' + this.watch.id).then(function (response) {
+          _this2.$emit('watchDeleted');
+        });
+      }
     }
   }
 });

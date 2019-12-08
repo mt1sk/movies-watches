@@ -39781,7 +39781,7 @@ var render = function() {
           : _vm._e(),
         _vm._v(" "),
         _c("div", { staticClass: "form-row" }, [
-          _c("div", { staticClass: "form-group col-4" }, [
+          _c("div", { staticClass: "form-group col-4 col-sm-5" }, [
             _c("input", {
               directives: [
                 {
@@ -39832,7 +39832,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group col-4" }, [
+          _c("div", { staticClass: "form-group col-4 col-sm-5" }, [
             _c("input", {
               directives: [
                 {
@@ -39883,7 +39883,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group col-2" }, [
+          _c("div", { staticClass: "form-group col-2 col-sm-1" }, [
             _c(
               "button",
               {
@@ -39900,7 +39900,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group col-2" }, [
+          _c("div", { staticClass: "form-group col-2 col-sm-1" }, [
             _c(
               "a",
               {

@@ -24,19 +24,37 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-3 justify-content-center">
+            <underline-pagination
+                    :response="response"
+                    :limit="2"
+                    :show-disabled="true"
+                    class="flex"
+                    @pagination-change-page="handleChangePage"
+            ></underline-pagination>
+        </div>
     </div>
 </template>
 
 <script>
     import MovieAdd from "./MovieAdd";
+    import UnderlinePagination from "./pagination/underline-pagination";
     import Form from "../classes/Form";
     export default {
         name: "MoviesList",
-        components: {MovieAdd},
+        components: {
+            MovieAdd,
+            UnderlinePagination,
+        },
         data() {
             return {
+                response: {},
                 movies: [],
-                form: new Form(),
+                form: new Form({
+                    params: {
+                        page: 1,
+                    },
+                }),
             }
         },
 
@@ -47,14 +65,22 @@
         methods: {
             getMovieList() {
                 this.form.get('/api/v1/movies').then(response => {
-                    this.movies = response.data.data;
-                });
+                        this.movies = response.data.data;
+                        this.response = response.data;
+                    });
             },
 
             deleteMovie(id) {
-                this.form.delete('/api/v1/movies/' + id).then(response => {
-                    this.getMovieList();
-                });
+                if (confirm('Are you sure ?!')) {
+                    this.form.delete('/api/v1/movies/' + id).then(response => {
+                        this.getMovieList();
+                    });
+                }
+            },
+
+            handleChangePage(page) {
+                this.form.params.page = page;
+                this.getMovieList()
             },
         },
     }

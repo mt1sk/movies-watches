@@ -6,26 +6,26 @@
                 <p class="mb-0">{{ watchForm.errors.message }}</p>
             </div>
             <div class="form-row">
-                <div class="form-group col-5">
+                <div class="form-group col-4">
                     <input v-model="watchForm.year" type="text" name="year" class="form-control" id="movieYear" placeholder="Year">
                     <small class="form-text text-danger" v-show="watchForm.errors.has('year')">
                         {{ watchForm.errors.get('year') }}
                     </small>
                 </div>
 
-                <div class="form-group col-5">
+                <div class="form-group col-4">
                     <input v-model="watchForm.count" type="text" name="count" class="form-control" id="movieCount" placeholder="Count watches">
                     <small class="form-text text-danger" v-show="watchForm.errors.has('count')">
                         {{ watchForm.errors.get('count') }}
                     </small>
                 </div>
 
-                <div class="form-group col-1">
+                <div class="form-group col-2">
                     <button type="submit" class="btn btn-success" :disabled="watchForm.errors.any()" @click.prevent="saveWatch">
                         &#10004;
                     </button>
                 </div>
-                <div class="form-group col-1">
+                <div class="form-group col-2">
                     <a href="#" class="btn btn-danger" @click.prevent="deleteWatch">X</a>
                 </div>
             </div>
